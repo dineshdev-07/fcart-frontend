@@ -488,7 +488,7 @@ const Cart = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#f6fdb7] p-5 rounded-2xl">
+    <div className="min-h-screen bg-[#EFF3F1] p-5 rounded-2xl border border-blue-200">
       {/* Header */}
       <div className="bg-white rounded-xl border border-gray-200 p-6 mb-8 flex justify-between">
         <h1 className="text-2xl font-bold text-[#2E7D32]">Cart</h1>

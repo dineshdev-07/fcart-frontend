@@ -57,7 +57,7 @@ const CategoryPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#f6fdb7] p-5 rounded-2xl">
+    <div className="min-h-screen bg-[#EFF3F1] p-5 rounded-2xl">
       {/* Header */}
       <div className="bg-white rounded-xl border border-gray-200 p-6 mb-5 flex">
         <button

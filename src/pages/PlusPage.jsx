@@ -61,7 +61,7 @@ const LoyaltyPage = () => {
 
   const progress = Math.min(points, requiredPoints) / requiredPoints;
   return (
-    <div className="min-h-screen bg-[#f6fdb7] p-5 rounded-2xl">
+    <div className="min-h-screen bg-[#EFF3F1] p-5 rounded-2xl border border-blue-200">
       <div className="max-w-3xl mx-auto px-4 py-5">
         {/* Header */}
         <div className="flex items-center gap-3 mb-6">
@@ -104,7 +104,7 @@ const LoyaltyPage = () => {
             <span
               className={`px-3 py-1 rounded-full text-xs font-semibold ${
                 isPlus
-                  ? "bg-[#f6fdb7] text-yellow-700"
+                  ? "bg-[#EFF3F1] text-yellow-700"
                   : "bg-gray-100 text-gray-700"
               }`}
             >
@@ -125,7 +125,7 @@ const LoyaltyPage = () => {
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
           {isPlus ? (
             <div className="text-center">
-              <div className="w-16 h-16 mx-auto rounded-full bg-[#f6fdb7] flex items-center justify-center">
+              <div className="w-16 h-16 mx-auto rounded-full bg-[#EFF3F1] flex items-center justify-center">
                 <Crown className="text-yellow-600" size={30} />
               </div>
 

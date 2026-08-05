@@ -7,29 +7,50 @@ const API = import.meta.env.VITE_API_URL;
 
 export const WishlistProvider = ({ children }) => {
   const [wishlist, setWishlist] = useState([]);
+  const [loading, setLoading] = useState(true);
 
+  // Fetch wishlist once when app loads
   const fetchWishlist = async () => {
-    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
+
+    if (!userInfo?.token) {
+      setWishlist([]);
+      setLoading(false);
+      return;
+    }
+
     try {
       const { data } = await axios.get(`${API}/api/wishlist`, {
         headers: {
-          Authorization: `Bearer ${userInfo?.token}`,
+          Authorization: `Bearer ${userInfo.token}`,
         },
+        withCredentials: true,
       });
 
-      if (Array.isArray(data)) {
-        setWishlist(Array.isArray(data) ? data.map((p) => p._id) : []);
-      } else {
-        console.log("Data is not an array:", data);
-        setWishlist([]);
-      }
+      setWishlist(Array.isArray(data) ? data.map((p) => p._id) : []);
     } catch (err) {
       console.error("Wishlist fetch error:", err);
+      setWishlist([]);
+    } finally {
+      setLoading(false);
     }
   };
 
+  // Fast like / unlike
   const toggleWishlist = async (productId) => {
-    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
+
+    if (!userInfo?.token) return;
+
+    // Save old state in case API fails
+    const previousWishlist = [...wishlist];
+
+    // Instant UI update
+    setWishlist((prev) =>
+      prev.includes(productId)
+        ? prev.filter((id) => id !== productId)
+        : [...prev, productId],
+    );
 
     try {
       await axios.post(
@@ -37,26 +58,34 @@ export const WishlistProvider = ({ children }) => {
         {},
         {
           headers: {
-            Authorization: `Bearer ${userInfo?.token}`,
+            Authorization: `Bearer ${userInfo.token}`,
           },
+          withCredentials: true,
         },
       );
-
-      await fetchWishlist(); // refresh after backend update
     } catch (err) {
-      console.error(err);
+      console.error("Wishlist update error:", err);
+
+      // Rollback if request fails
+      setWishlist(previousWishlist);
     }
   };
 
   const isWishlisted = (productId) => wishlist.includes(productId);
 
- useEffect(() => {
-  fetchWishlist();
-}, []);
+  useEffect(() => {
+    fetchWishlist();
+  }, []);
 
   return (
     <WishlistContext.Provider
-      value={{ wishlist, toggleWishlist, isWishlisted, fetchWishlist }}
+      value={{
+        wishlist,
+        loading,
+        toggleWishlist,
+        isWishlisted,
+        fetchWishlist,
+      }}
     >
       {children}
     </WishlistContext.Provider>

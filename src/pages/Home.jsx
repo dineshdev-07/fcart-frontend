@@ -240,11 +240,11 @@ const Home = ({ search = "" }) => {
 
   return (
     <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 pb-0 text-[#2E2A22]">
-      <section className="relative mt-2 sm:mt-4 overflow-hidden rounded-2xl border border-[#81C784]/40  shadow-[0_18px_45px_rgba(46,125,50,0.12)]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(129,199,132,0.3),transparent_28%),linear-gradient(135deg,rgba(255,249,196,0.98),rgba(255,255,255,0.75))]" />
+      <section className="relative mt-2 sm:mt-4 overflow-hidden rounded-2xl border  shadow-[0_18px_45px_rgba(46,125,50,0.12)]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(129,199,132,0.3),transparent_28%),linear-gradient(135deg,#EFF3F1,rgba(255,255,255,0.75))]" />
         <div className="relative grid min-h-[360px] md:min-h-[420px] lg:grid-cols-[0.92fr_1.08fr]">
           <div className="flex flex-col justify-center p-5 sm:p-8 md:p-10">
-            <div className="mb-4 flex w-fit items-center gap-2 rounded-full border border-[#81C784]/50 bg-white/70 px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-[#2E7D32]">
+            <div className="mb-4 flex w-fit items-center gap-2 rounded-full border  bg-white/70 px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-[#2E7D32]">
               <Leaf size={14} />
               Nature inspired groceries
             </div>
@@ -285,7 +285,7 @@ const Home = ({ search = "" }) => {
               ].map(({ icon: Icon, text }) => (
                 <div
                   key={text}
-                  className="rounded-xl border border-[#81C784]/30 bg-white/65 px-2 py-2 text-center text-[10px] font-bold text-[#2E7D32]"
+                  className="rounded-xl border bg-white/65 px-2 py-2 text-center text-[10px] font-bold text-[#2E7D32]"
                 >
                   <Icon className="mx-auto mb-1" size={16} />
                   {text}
@@ -304,7 +304,7 @@ const Home = ({ search = "" }) => {
                 }`}
               />
             ))}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#2E7D32]/70 via-transparent to-transparent lg:bg-gradient-to-r lg:from-[#FFF9C4] lg:via-transparent lg:to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#2E7D32]/70 via-transparent to-transparent lg:bg-gradient-to-r lg:via-transparent lg:to-transparent" />
             <div className="absolute bottom-4 left-4 flex gap-2">
               {produceSlides.map((_, i) => (
                 <button
@@ -313,7 +313,7 @@ const Home = ({ search = "" }) => {
                   aria-label={`Show produce slide ${i + 1}`}
                   className={`h-2 rounded-full transition-all ${
                     i === currentProduceAd
-                      ? "w-8 bg-[#f6fdb7]"
+                      ? "w-8 bg-[#EFF3F1]"
                       : "w-2 bg-white/70"
                   }`}
                 />
@@ -324,10 +324,10 @@ const Home = ({ search = "" }) => {
       </section>
 
       <section
-        className="my-6 rounded-2xl border border-[#81C784]/30 bg-[#f6fdb7] p-4 sm:my-10 sm:p-6 md:my-12"
+        className="my-6 rounded-2xl border  bg-[#EFF3F1] border-blue-200 p-4 sm:my-10 sm:p-6 md:my-12"
         id="category-section"
       >
-        <SectionTitle eyebrow="Shop fresh" title="Category" />
+        <SectionTitle eyebrow="Shop fresh" title="Category"/>
         <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 gap-4">
           {categories.map((cat) => (
             <div
@@ -339,13 +339,13 @@ const Home = ({ search = "" }) => {
                 justify-center "
             >
               <div
-                className="w-36 rounded-xl border border-brand-light/20 hover:border-brand-primary/30 bg-white p-4 shadow-sm transition-all 
+                className="w-36 rounded-xl border border-blue-200/90 bg-white p-4 shadow-sm transition-all 
                 group-hover:-translate-y-1  duration-300 sm:rounded-2xl sm:p-2 md:p-3   "
               >
                 <img
                   src={cat.image}
                   alt={cat.name}
-                  className="w-32 aspect-square  object-contain group-hover:scale-110 transition-transform duration-300 "
+                  className="w-32 aspect-square  object-contain group-hover:scale-110 transition-transform duration-300  "
                 />
               </div>
               <p className="text-center text-sm md:text-base font-medium text-gray-700">
@@ -357,7 +357,7 @@ const Home = ({ search = "" }) => {
       </section>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5 ">
-        <div className="bg-[#f9ffa8] rounded-2xl border border-gray-200 shadow-sm p-6 ">
+        <div className="bg-[#EFF3F1] rounded-2xl shadow-sm p-6 border border-blue-200">
           <Gift className="text-yellow-700 mb-4" size={36} />
           <h3 className="text-xl font-bold text-[#2E7D32]">New User Offer</h3>
           <p className="text-gray-600 mt-2">
@@ -366,7 +366,7 @@ const Home = ({ search = "" }) => {
           </p>
         </div>
 
-        <div className="bg-[#f9ffa8] rounded-2xl border border-gray-200 shadow-sm p-6">
+        <div className="bg-[#EFF3F1] rounded-2xl border border-blue-200 shadow-sm p-6">
           <Crown className="text-yellow-700 mb-4" size={36} />
           <h3 className="text-xl font-bold text-[#2E7D32]">Plus Membership</h3>
           <p className="text-gray-600 mt-2">
@@ -375,7 +375,7 @@ const Home = ({ search = "" }) => {
           </p>
         </div>
 
-        <div className="bg-[#f9ffa8] rounded-2xl border border-gray-200 shadow-sm p-6">
+        <div className="bg-[#EFF3F1] rounded-2xl border border-blue-200 shadow-sm p-6">
           <Award className="text-yellow-700 mb-4" size={36} />
           <h3 className="text-xl font-bold text-[#2E7D32]">Loyalty Rewards</h3>
           <p className="text-gray-600 mt-2">
@@ -384,7 +384,7 @@ const Home = ({ search = "" }) => {
         </div>
       </div>
 
-      <section className="my-8 rounded-xl bg-[#f6fdb7] border border-gray-200 p-5">
+      <section className="my-8 rounded-xl bg-[#EFF3F1] border border-blue-200 p-5">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
@@ -397,7 +397,7 @@ const Home = ({ search = "" }) => {
             </h2>
 
             {isAdmin && (
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-sm text-gray-900 mt-1">
                 {products.filter((p) => p.isPinned).length}/50 Products
               </p>
             )}
@@ -438,28 +438,28 @@ const Home = ({ search = "" }) => {
         </div>
       </section>
 
-      <footer className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] bg-[#2E7D32] text-[#FFF9C4] pt-8 sm:pt-12 md:pt-16 pb-5 sm:pb-8 mt-10 sm:mt-14 md:mt-20   shadow-[0_-8px_24px_rgba(46,125,50,0.2)] overflow-hidden">
+      <footer className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] bg-[#EFF3F1] text-[#2E7D32] pt-8 sm:pt-12 md:pt-16 pb-5 sm:pb-8 mt-10 sm:mt-14 md:mt-20 overflow-hidden border border-blue-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 grid grid-cols-1 sm:grid-cols-3  sm:gap-8 md:gap-10">
           <div className="space-y-2 sm:space-y-3 text-center sm:text-left">
-            <h2 className="text-lg sm:text-xl md:text-2xl font-black text-[#FFF9C4]/75  tracking-tight">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-black  tracking-tight">
               FreshCart
             </h2>
-            <p className="text-[11px] sm:text-xs md:text-sm text-[#FFF9C4]/75 leading-relaxed max-w-[220px] mx-auto sm:mx-0">
+            <p className="text-[11px] sm:text-xs md:text-sm  leading-relaxed max-w-[220px] mx-auto sm:mx-0">
               Your destination for farm-fresh produce. Quality you can taste.
             </p>
           </div>
 
           <div className="text-center sm:text-left">
-            <h3 className="text-[#81C784] font-bold mb-3 sm:mb-4 uppercase text-[10px] sm:text-xs tracking-widest">
+            <h3 className=" font-bold mb-3 sm:mb-4 uppercase text-[10px] sm:text-xs tracking-widest">
               Explore
             </h3>
-            <ul className="text-[11px] sm:text-xs md:text-sm space-y-2 sm:space-y-3 text-[#FFF9C4]/75">
+            <ul className="text-[11px] sm:text-xs md:text-sm space-y-2 sm:space-y-3">
               <li>
                 <button
                   onClick={() =>
                     window.scrollTo({ top: 0, behavior: "smooth" })
                   }
-                  className="hover:text-white transition"
+                  className=""
                 >
                   Home
                 </button>
@@ -471,7 +471,7 @@ const Home = ({ search = "" }) => {
                       .getElementById("category-section")
                       ?.scrollIntoView({ behavior: "smooth" })
                   }
-                  className="hover:text-white transition"
+                  className=""
                 >
                   Shop Categories
                 </button>
@@ -480,22 +480,21 @@ const Home = ({ search = "" }) => {
           </div>
 
           <div className="text-center sm:text-left">
-            <h3 className="text-[#81C784] font-bold mb-3 sm:mb-4 uppercase text-[10px] sm:text-xs tracking-widest">
+            <h3 className=" font-bold mb-3 sm:mb-4 uppercase text-[10px] sm:text-xs tracking-widest">
               Support
             </h3>
-            <div className="text-[11px] sm:text-xs md:text-sm space-y-1.5 sm:space-y-2 text-[#FFF9C4]/75">
+            <div className="text-[11px] sm:text-xs md:text-sm space-y-1.5 sm:space-y-2 ">
               <p>
-                <span className="text-[#81C784]">Email:</span>{" "}
-                freshcart1234@gmail.com
+                <span className="">Email:</span> freshcart1234@gmail.com
               </p>
               <p>
-                <span className="text-[#81C784]">Call:</span> +91 78100 70xxx
+                <span className="">Call:</span> +91 78100 70xxx
               </p>
             </div>
           </div>
         </div>
-        <div className="max-w-7xl m-auto px-4 sm:px-6 md:px-8 border-t border-[#81C784]/25  sm:mt-10 md:mt-8 pt-4 sm:pt-5 flex flex-col xs:flex-row justify-between items-center gap-3">
-          <p className="text-[14px] sm:text-[9px] md:text-[10px] text-[#FFF9C4]/60 tracking-widest uppercase text-center">
+        <div className="max-w-7xl m-auto px-4 sm:px-6 md:px-8 border-t border-blue-200  sm:mt-10 md:mt-8 pt-4 sm:pt-5 flex flex-col xs:flex-row justify-between items-center gap-3">
+          <p className="text-[14px] sm:text-[9px] md:text-[10px] tracking-widest uppercase text-center">
             @Copyright {new Date().getFullYear()} FreshCart. All Rights
             Reserved.
           </p>

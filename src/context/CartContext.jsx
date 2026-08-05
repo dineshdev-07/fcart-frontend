@@ -26,8 +26,8 @@ export const CartProvider = ({ children }) => {
 
   const fetchCart = async () => {
     const token = JSON.parse(localStorage.getItem("userInfo"))?.token;
-  
-    if (!token) return; 
+
+    if (!token) return;
 
     try {
       const res = await axios.get(`${API}/api/cart`, {
@@ -37,10 +37,10 @@ export const CartProvider = ({ children }) => {
       });
 
       const items = Array.isArray(res.data)
-  ? res.data
-  : res.data.items || res.data.cartItems || [];
+        ? res.data
+        : res.data.items || res.data.cartItems || [];
 
-setCartItems(res.data.cartItems || []);
+      setCartItems(mergeCartData(items));
     } catch (err) {
       console.error(err);
     }
@@ -51,10 +51,47 @@ setCartItems(res.data.cartItems || []);
   }, []);
 
   const addToCart = async (product, quantity = 1) => {
-    try {
-      const token = JSON.parse(localStorage.getItem("userInfo"))?.token;
+    const token = JSON.parse(localStorage.getItem("userInfo") || "{}")?.token;
 
-      const { data } = await axios.post(
+    if (!token) return;
+
+    // Save old cart
+    const previousCart = [...cartItems];
+
+    // ⚡ Instant UI update
+    setCartItems((prev) => {
+      const existing = prev.find((item) => {
+        const id = item.product?._id || item.product;
+        return id === product._id;
+      });
+
+      if (existing) {
+        return prev.map((item) => {
+          const id = item.product?._id || item.product;
+
+          return id === product._id
+            ? {
+                ...item,
+                quantity: item.quantity + quantity,
+              }
+            : item;
+        });
+      }
+
+      return [
+        ...prev,
+        {
+          product: product._id,
+          name: product.name,
+          image: product.images?.[0],
+          price: product.finalPrice || product.price,
+          quantity,
+        },
+      ];
+    });
+
+    try {
+      await axios.post(
         `${API}/api/cart`,
         {
           productId: product._id,
@@ -67,16 +104,11 @@ setCartItems(res.data.cartItems || []);
           withCredentials: true,
         },
       );
-      
-      const rawItems = Array.isArray(data)
-        ? data
-        : data.items || data.cartItems || [];
-        
-
-      setCartItems(mergeCartData(rawItems));
     } catch (err) {
       console.error("Add to Cart Error:", err);
-      alert("Could not add to cart. Please try again.");
+
+      // Rollback if request fails
+      setCartItems(previousCart);
     }
   };
 

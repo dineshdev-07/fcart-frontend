@@ -31,9 +31,7 @@ import { UserRound } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Heart,
-  Store,
   ChevronDown,
-  Users,
   Menu,
   X,
   Home as HomeIcon,
@@ -46,12 +44,7 @@ import {
   Crown,
   ChevronRight,
   Search,
-  CircleUserRound,
-  House,
-  Package2,
-  PanelLeft,
 } from "lucide-react";
-
 import { CartProvider, useCart } from "./context/CartContext";
 import { WishlistProvider, useWishlist } from "./context/WishlistContext";
 
@@ -104,19 +97,6 @@ function JoinDropdown() {
       </button>
     </div>
   );
-}
-
-function AdminManageDropdown({ sellerCount }) {
-  const [open, setOpen] = useState(false);
-  const ref = useRef(null);
-
-  useEffect(() => {
-    const handler = (e) => {
-      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, []);
 }
 
 function MobileDrawer({
@@ -353,10 +333,10 @@ function AppContent() {
   const wishlistCount = wishlist.length;
 
   useEffect(() => {
-    const userInfo = localStorage.getItem("userInfo");
-    const admin = localStorage.getItem("isAdmin");
-    setIsLoggedIn(!!userInfo);
-    setIsAdmin(admin === "true");
+    const user = JSON.parse(localStorage.getItem("userInfo") || "null");
+
+    setIsLoggedIn(!!user);
+    setIsAdmin(user?.isAdmin || false);
   }, [location.pathname]);
 
   useEffect(() => {
@@ -420,6 +400,7 @@ function AppContent() {
 
   const fetchAdminAlerts = useCallback(async () => {
     if (!isAdmin) return;
+    if (!userInfo?.token) return;
     try {
       const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
@@ -475,17 +456,6 @@ function AppContent() {
 
   return (
     <div className="bg-white border border-brand-light/30">
-      <style>{`
-        .nav-link-anim { position: relative; }
-        .nav-link-anim::after {
-          content: ''; position: absolute; width: 0; height: 2px;
-          bottom: -4px; left: 0; background-color: #2E7D32;
-          transition: width 0.3s ease-in-out;
-        }
-        .nav-link-anim:hover::after { width: 100%; }
-        .bottom-nav-item { tap-highlight-color: transparent; -webkit-tap-highlight-color: transparent; }
-      `}</style>
-
       <ScrollToTop />
       <MobileDrawer
         isOpen={drawerOpen}
@@ -498,7 +468,7 @@ function AppContent() {
       />
 
       {!isAuthPage && (
-        <nav className="sticky top-0 z-50 bg-[#f9ffa8] border-b  shadow-sm">
+        <nav className="sticky top-0 z-50 bg-[#EFF3F1] border-b border-blue-200 shadow-sm">
           <div className="max-w-7xl mx-4">
             {/* Top */}
 
@@ -690,7 +660,6 @@ justify-center"
                   onChange={(e) => {
                     setSearch(e.target.value);
                     fetchSuggestions(e.target.value);
-                    lodash.debounce();
                   }}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {

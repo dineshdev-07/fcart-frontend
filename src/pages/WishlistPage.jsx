@@ -18,143 +18,109 @@ const WishlistProductCard = ({
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const { isWishlisted } = useWishlist();
+
   const liked = isWishlisted(product._id);
 
   const loyaltyPoints = Number(userInfo?.loyaltyPoints || 0);
   const isNewUser = !!(userInfo && userInfo.firstOrderCompleted === false);
-  const isLoyal = loyaltyPoints >= 20;
   const isPlusMember = userInfo?.isPlusMember || false;
 
   const stock = product.quantity || 0;
   const isOutOfStock = stock === 0;
-  const isLowStock = stock > 0 && stock <= 10;
   const mrp = Number(product.price) || 0;
 
   const offerData = calculateDiscountedPrice(
     product,
-    { isNewUser, loyaltyPoints, isPlusMember },
-    { isLowestPriceItem, isFirstOrder: isNewUser, quantityIndex: 0 },
+    {
+      isNewUser,
+      loyaltyPoints,
+      isPlusMember,
+    },
+    {
+      isLowestPriceItem,
+      isFirstOrder: isNewUser,
+      quantityIndex: 0,
+    },
   );
 
   const finalPrice = offerData.finalPrice;
-  const totalDiscount = offerData.totalDiscount;
   const totalSavings = mrp - finalPrice;
-
-  const showNewUserBadge =
-    isNewUser &&
-    isLowestPriceItem &&
-    totalDiscount > offerData.baseDiscount + offerData.expiryDiscount;
-  const showLoyalBadge =
-    !showNewUserBadge && isLoyal && offerData.appliedLabel === "LOYALTY OFFER";
-  const showPlusBadge = !showNewUserBadge && !showLoyalBadge && isPlusMember;
 
   return (
     <div
       onClick={() => navigate(`/product/${product._id}`)}
-      className="group relative bg-white rounded-xl border border-gray-200 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 cursor-pointer overflow-hidden flex flex-col w-full"
+      className="relative bg-white rounded-xl border border-gray-200 hover:shadow-md transition overflow-hidden cursor-pointer flex flex-col"
     >
+      {/* Heart button */}
       <button
         onClick={(e) => {
           e.stopPropagation();
           onRemove(product._id);
         }}
-        className="absolute top-2 right-2 z-20 transition-transform active:scale-90"
+        className="absolute top-2 right-2 z-10 p-1.5 bg-white rounded-full shadow-sm hover:bg-red-50 transition"
       >
         <Heart
           size={18}
-          className={`transition-all duration-300 ${
+          className={
             liked
-              ? "text-red-500 fill-red-500 drop-shadow-[0_0_6px_rgba(239,68,68,0.4)]"
-              : "text-gray-400 group-hover:text-red-400"
-          }`}
+              ? "text-red-500 fill-red-500"
+              : "text-gray-400 hover:text-red-400"
+          }
         />
       </button>
 
-      {(showNewUserBadge || showLoyalBadge || showPlusBadge) && (
-        <div
-          className={`absolute top-0 left-0 text-white text-[8px] sm:text-[10px] px-2 py-1 rounded-br-md font-bold z-10 shadow-sm ${
-            showNewUserBadge
-              ? "bg-blue-600"
-              : showLoyalBadge
-                ? "bg-purple-600"
-                : "bg-amber-500"
-          }`}
-        >
-          {showNewUserBadge ? "NEW USER" : showLoyalBadge ? "LOYALTY" : "PLUS"}
-        </div>
-      )}
-
-      <div className="relative w-full h-28 xs:h-32 sm:h-36 md:h-40 bg-gray-50 flex items-center justify-center overflow-hidden flex-shrink-0">
+      {/* Product image */}
+      <div className="w-full h-36 bg-gray-50 flex items-center justify-center p-3">
         <img
           src={product.images?.[0] || "https://via.placeholder.com/200"}
-          className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105 p-1"
           alt={product.name}
+          className="w-full h-full object-contain"
         />
       </div>
 
-      <div className="p-2 xs:p-2.5 sm:p-3 flex flex-col flex-1">
-        <p className="text-[8px] sm:text-[10px] uppercase text-gray-400 font-semibold truncate">
-          {product.brand || "Brand"}
-        </p>
-        <h3 className="text-[11px] sm:text-[13px] text-gray-800 font-medium truncate group-hover:text-[#6FAF8E] mt-0.5">
+      {/* Product details */}
+      <div className="p-3 flex flex-col flex-1">
+        <h3 className="text-sm font-medium text-gray-800 line-clamp-2 min-h-[40px]">
           {product.name}
         </h3>
 
-        <div className="mt-1 flex items-center gap-1 flex-wrap">
-          <span className="text-sm sm:text-lg font-bold text-gray-900">
-            ₹{finalPrice}
-          </span>
-          {totalDiscount > 0 && mrp > finalPrice && (
-            <span className="text-[9px] sm:text-xs text-gray-400 line-through">
-              ₹{mrp}
-            </span>
-          )}
-          {totalDiscount > 0 && (
-            <span className="text-[8px] sm:text-[10px] font-semibold text-green-600">
-              {totalDiscount}% OFF
-            </span>
+        {/* Price */}
+        <div className="mt-2 flex items-center gap-2 flex-wrap">
+          <span className="text-lg font-bold text-gray-900">₹{finalPrice}</span>
+
+          {mrp > finalPrice && (
+            <span className="text-xs text-gray-400 line-through">₹{mrp}</span>
           )}
         </div>
 
-        {totalSavings > 0 && (
-          <p className="text-[8px] sm:text-[10px] text-green-600 font-semibold mt-0.5">
-            Save ₹{totalSavings}
-          </p>
+        {/* Plus badge */}
+        {isPlusMember && (
+          <div className="mt-2 inline-flex items-center gap-1 self-start rounded-full bg-amber-100 px-2 py-1 text-[10px] font-semibold text-amber-700">
+            ⭐ Plus Member
+          </div>
         )}
 
-        <div className="mt-1 flex-1">
-          {isOutOfStock ? (
-            <p className="text-red-600 text-[8px] sm:text-[10px] font-bold">
-              No stock
-            </p>
-          ) : isLowStock ? (
-            <p className="text-orange-600 text-[8px] sm:text-[10px] font-bold">
-              ⚠ Only {stock} left
-            </p>
-          ) : (
-            <p className="text-gray-400 text-[7px] sm:text-[9px]">
-              {isPlusMember
-                ? "⭐ Plus Price"
-                : isLoyal
-                  ? "👤 Loyalty Applied"
-                  : "Free Delivery"}
-            </p>
-          )}
-        </div>
+        {/* Savings */}
+        {totalSavings > 0 && (
+          <p className="text-xs text-green-600 mt-2">Save ₹{totalSavings}</p>
+        )}
 
+        {/* Add to cart */}
         <button
           onClick={(e) => {
             e.stopPropagation();
-            if (!isOutOfStock) addToCart({ ...product, finalPrice });
+            if (!isOutOfStock) {
+              addToCart({ ...product, finalPrice });
+            }
           }}
           disabled={isOutOfStock}
-          className={`mt-2 w-full text-[9px] sm:text-xs py-1.5 rounded-md font-semibold transition ${
+          className={`mt-3 w-full py-2 rounded-lg text-sm font-semibold transition ${
             isOutOfStock
               ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-              : "bg-[#6FAF8E] text-white hover:bg-green-700"
+              : "bg-[#2E7D32] text-white hover:bg-[#1B5E20]"
           }`}
         >
-          {isOutOfStock ? "Out of Stock" : "Add"}
+          {isOutOfStock ? "Out of Stock" : "Add to Cart"}
         </button>
       </div>
     </div>
@@ -188,18 +154,19 @@ const WishlistPage = () => {
   }, []);
 
   const handleRemove = async (productId) => {
-    await toggleWishlist(productId);
+    try {
+      // remove immediately from UI
+      setProducts((prev) => prev.filter((item) => item._id !== productId));
 
-    const { data } = await axios.get(`${API}/api/wishlist`, {
-      headers: {
-        Authorization: `Bearer ${userInfo?.token}`,
-      },
-    });
-    setProducts(data);
+      // update server in background
+      await toggleWishlist(productId);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-[#f6fdb7] p-5 rounded-2xl">
+    <div className="min-h-screen bg-[#EFF3F1] p-5 rounded-2xl border border-blue-200">
       <div className="bg-white rounded-xl border border-gray-200 p-6 mb-8 flex justify-between">
         <h1 className="text-2xl font-bold text-[#2E7D32]">Wishlist</h1>
         <span className="bg-green-100 text-green-700 px-4 py-2 rounded-full font-medium">
@@ -208,7 +175,11 @@ const WishlistPage = () => {
       </div>
 
       <div className="px-3 sm:px-6 lg:px-8 py-4 sm:py-6">
-        {products.length === 0 ? (
+        {loading ? (
+          <div className="flex justify-center items-center py-20">
+            <div className="w-10 h-10 border-4 border-green-600 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        ) : products.length === 0 ? (
           <div className="flex min-h-[45vh] items-center justify-center px-6">
             <div className="max-w-sm text-center">
               <h2 className="mt-6 text-2xl font-bold text-gray-900 mb-5">
@@ -217,7 +188,7 @@ const WishlistPage = () => {
 
               <button
                 onClick={() => navigate("/")}
-                className="flex-1 rounded-xl border border-[#2E7D32] bg-[#2E7D32] py-3 px-3 font-semibold text-white hover:bg-[#1B5E20] transition"
+                className="rounded-xl border border-[#2E7D32] bg-[#2E7D32] py-3 px-4 font-semibold text-white hover:bg-[#1B5E20] transition"
               >
                 Explore Products
               </button>

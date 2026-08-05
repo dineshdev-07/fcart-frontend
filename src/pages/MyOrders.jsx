@@ -81,7 +81,7 @@ const MyOrders = () => {
   }
 
   return (
-    <div className="min-h-screen p-5 rounded-2xl bg-[#f6fdb7]">
+    <div className="min-h-screen p-5 rounded-2xl bg-[#EFF3F1] border border-blue-200">
       {/* Header */}
       <div className="bg-white rounded-xl border border-gray-200 p-6 mb-8 flex gap-5">
         <div className="h-12 w-12 rounded-xl bg-[#2F7D32] flex items-center justify-center">
@@ -191,7 +191,7 @@ const MyOrders = () => {
                 <div className="mt-6 flex flex-wrap gap-3">
                   <Link
                     to={`/order/${order._id}`}
-                    className="px-5 py-2 rounded-lg bg-[#EEF8EE] text-[#2F7D32] font-medium hover:bg-[#E3F3E3]"
+                    className="px-5 py-2 rounded-lg bg-[#EEF8EE] text-[#2F7D32] font-medium border border-blue-200"
                   >
                     View Details
                   </Link>

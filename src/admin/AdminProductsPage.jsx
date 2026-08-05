@@ -82,7 +82,7 @@ const AdminProductsPage = () => {
   const isFull = pinnedCount >= 50;
 
   return (
-    <div className="min-h-screen bg-[#f6fdb7] p-5 rounded-2xl">
+    <div className="min-h-screen bg-[#EFF3F1] p-5 rounded-2xl border border-blue-200">
       <div className="max-w-7xl mx-auto px-5">
         {/* Header */}
 

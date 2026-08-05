@@ -154,7 +154,7 @@ function AdminOrders() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f6fdb7] p-5 rounded-2xl">
+    <div className="min-h-screen bg-[#EFF3F1] p-5 rounded-2xl border border-blue-200">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 mb-6 sm:mb-8">
@@ -210,7 +210,7 @@ function AdminOrders() {
                   (order.discountPrice > 0 ? "Discount Applied" : null);
 
                 let payment = "Unpaid";
-                let paymentColor = "bg-[#f6fdb7] text-yellow-700";
+                let paymentColor = "bg-[#EFF3F1] text-yellow-700";
 
                 if (order.isPaid) {
                   payment = "Paid";
@@ -337,15 +337,12 @@ function AdminOrders() {
                 );
               })
             ) : (
-              <div className="bg-white border rounded-xl p-10 text-center">
-                <h2 className="text-xl font-semibold text-gray-600">
+              <div className="text-center mt-20">
+                <h2 className="text-xl font-semibold">
                   No Orders Found
                 </h2>
 
-                <p className="text-gray-500 mt-2">
-                  No orders match "
-                  <span className="font-medium">{searchTerm}</span>"
-                </p>
+              
               </div>
             )}
           </div>

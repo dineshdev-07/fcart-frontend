@@ -1,26 +1,17 @@
 import axios from "axios";
-import React, { useEffect, useState, useCallback, useRef } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   ChevronLeft,
   Package,
   CreditCard,
   Phone,
-  XCircle,
   CheckCircle,
   RefreshCcw,
-  Tag,
-  Percent,
-  Star,
-  Gift,
-  Eye,
-  ShoppingCart,
-  Calendar,
-  TrendingDown,
-  Shield,
-  HelpCircle,
   Truck,
   Clock,
+  MapPin,
+  XCircle,
 } from "lucide-react";
 
 const API = import.meta.env.VITE_API_URL;
@@ -150,7 +141,7 @@ const AdminOrderDetails = () => {
     {
       show: order.refundStatus === "Pending",
       label: "Refund Pending",
-      bg: "bg-[#f6fdb7] text-yellow-700",
+      bg: "bg-[#EFF3F1] text-yellow-700",
     },
     {
       show: order.refundStatus === "Approved",
@@ -159,304 +150,237 @@ const AdminOrderDetails = () => {
     },
   ].filter((s) => s.show);
 
-  return (
-    <div className="min-h-screen bg-[#f6fdb7] p-5 rounded-2xl">
-      <header className="sticky top-0 bg-white/95 backdrop-blur-md border-b px-3 sm:px-6 lg:px-8 py-3 sm:py-4 z-40 shadow-sm">
-        <div className="max-w-[1400px] mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-            <button
-              onClick={() => navigate(-1)}
-              className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-xl text-[#6FAF8E] shrink-0 transition"
-            >
-              <ChevronLeft size={20} />
-            </button>
-            <div className="min-w-0">
-              <h1 className="text-base sm:text-lg lg:text-xl font-black uppercase italic truncate">
-                Admin: Order Control
-              </h1>
-              <p className="text-[9px] sm:text-[10px] text-gray-400 font-mono font-bold truncate">
-                ID: {order._id}
-              </p>
-            </div>
-          </div>
-          <div className="flex flex-wrap gap-2 w-full sm:w-auto shrink-0">
-            {showCancelBtn && (
-              <button
-                disabled={btnLoading}
-                onClick={() => updateOrderStatus("cancel")}
-                className="flex-1 sm:flex-none bg-red-50 text-red-600 border border-red-200 px-3 sm:px-5 py-2.5 rounded-xl font-black text-[10px] sm:text-xs flex items-center justify-center gap-1.5 hover:bg-red-100 transition disabled:opacity-60"
-              >
-                <XCircle size={13} />
-                <span className="hidden xs:inline">CANCEL </span>ORDER
-              </button>
-            )}
-            {showRefundBtn && (
-              <button
-                disabled={btnLoading}
-                onClick={() => updateOrderStatus("refund")}
-                className="flex-1 sm:flex-none bg-orange-500 text-white px-3 sm:px-5 py-2.5 rounded-xl font-black text-[10px] sm:text-xs flex items-center justify-center gap-1.5 hover:bg-orange-600 shadow-lg shadow-orange-200 animate-bounce disabled:opacity-60"
-              >
-                <RefreshCcw size={13} />
-                <span className="hidden xs:inline">PROCESS </span>REFUND
-              </button>
-            )}
+ return (
+   <div className="min-h-screen bg-[#EFF3F1] p-5 rounded-2xl border border-blue-200">
+    <div className="max-w-6xl mx-auto space-y-6">
+      {/* Header */}
+      <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 flex flex-col sm:flex-row justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => navigate(-1)}
+            className="p-2 rounded-lg hover:bg-gray-100 text-[#2E7D32]"
+          >
+            <ChevronLeft size={20} />
+          </button>
+
+          <div>
+            <h1 className="text-xl sm:text-2xl font-bold text-[#2E7D32]">
+              Order Details
+            </h1>
+            <p className="text-xs text-gray-500 font-mono">
+              {order._id}
+            </p>
           </div>
         </div>
-      </header>
 
-      <main className="max-w-[1400px] mx-auto p-3 sm:p-5 lg:p-8 flex flex-col xl:flex-row gap-6 lg:gap-8">
-        <div className="flex-[2] min-w-0 space-y-4 sm:space-y-6">
-          <div className="flex flex-wrap gap-2">
-            {statusChips.map(({ label, bg }) => (
-              <span
-                key={label}
-                className={`text-[10px] font-black uppercase px-3 py-1 rounded-full ${bg}`}
-              >
-                {label}
-              </span>
-            ))}
-          </div>
-
-          <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
-            {[
-              {
-                icon: (
-                  <CreditCard
-                    size={18}
-                    className={order.isPaid ? "text-green-600" : "text-red-500"}
-                  />
-                ),
-                label: "Payment Status",
-                value: order.isPaid
-                  ? `PAID (${order.paymentMethod})`
-                  : "UNPAID",
-                bg: order.isPaid
-                  ? "bg-green-50 border-gray-200"
-                  : "bg-red-50 border-red-100",
-              },
-              {
-                icon: (
-                  <Package
-                    size={18}
-                    className={
-                      order.isDelivered ? "text-blue-600" : "text-gray-400"
-                    }
-                  />
-                ),
-                label: "Delivery Status",
-                value: order.isDelivered
-                  ? "DELIVERED"
-                  : order.orderStatus === "Out for Delivery"
-                    ? "EN ROUTE"
-                    : "PROCESSING",
-                bg: order.isDelivered
-                  ? "bg-blue-50 border-blue-100"
-                  : order.orderStatus === "Out for Delivery"
-                    ? "bg-purple-50 border-purple-100"
-                    : "bg-gray-50 border-gray-100",
-              },
-              {
-                icon: (
-                  <RefreshCcw
-                    size={18}
-                    className={
-                      order.isRefunded ? "text-purple-600" : "text-orange-500"
-                    }
-                  />
-                ),
-                label: "Order Lifecycle",
-                value: order.isRefunded
-                  ? "REFUNDED"
-                  : order.isCancelled
-                    ? "CANCELLED"
-                    : "ACTIVE",
-                bg: order.isCancelled
-                  ? "bg-orange-50 border-orange-100"
-                  : "bg-gray-50 border-gray-100",
-              },
-            ].map(({ icon, label, value, bg }) => (
-              <div
-                key={label}
-                className={`p-4 sm:p-5 rounded-[24px] sm:rounded-[32px] border ${bg}`}
-              >
-                {icon}
-                <p className="text-[8px] sm:text-[9px] font-black uppercase text-gray-400 mt-2">
-                  {label}
-                </p>
-                <h3 className="text-xs sm:text-sm font-bold uppercase mt-0.5">
-                  {value}
-                </h3>
-              </div>
-            ))}
-          </div>
-          {order.isPaid && order.isCancelled && (
-            <div className="bg-white rounded-3xl border border-gray-200 p-5 mt-5 shadow-sm">
-              <h3 className="text-sm font-bold text-gray-700 mb-3">
-                Refund Status
-              </h3>
-
-              <p className="text-lg font-semibold text-[#2E7D32]">
-                {order.refundStatus}
-              </p>
-
-              {order.refundRequestedAt && (
-                <p className="text-sm text-gray-500 mt-2">
-                  Requested on:{" "}
-                  {new Date(order.refundRequestedAt).toLocaleString()}
-                </p>
-              )}
-
-              {order.refundedAt && (
-                <p className="text-sm text-gray-500">
-                  Approved on: {new Date(order.refundedAt).toLocaleString()}
-                </p>
-              )}
-            </div>
+        <div className="flex flex-wrap gap-2">
+          {!order.isDelivered && !order.isCancelled && (
+            <button
+              disabled={btnLoading}
+              onClick={() => updateOrderStatus("deliver")}
+              className="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 text-sm font-medium disabled:opacity-60"
+            >
+              Mark Delivered
+            </button>
           )}
 
-          <div className="bg-white rounded-[28px] sm:rounded-[40px] border border-gray-100 overflow-visible shadow-sm">
-            <div className="px-4 sm:px-6 py-4 border-b bg-gray-50/50 flex justify-between items-center rounded-t-[28px] sm:rounded-t-[40px]">
-              <h3 className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-gray-400">
-                Order Items
-              </h3>
-              <span className="text-[9px] sm:text-[10px] font-bold bg-white px-3 py-1 rounded-full border">
-                {order.orderItems?.length || 0} Products
-              </span>
-            </div>
-            <div className="p-3 sm:p-5 space-y-3">
-              {order.orderItems?.map((item) => (
-                <div
-                  key={item._id}
-                  className="flex items-center justify-between p-3 sm:p-4 bg-gray-50 rounded-2xl sm:rounded-3xl gap-3"
-                >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <img
-                      src={
-                        item.image?.startsWith("http")
-                          ? item.image
-                          : `${API},${item.image}`
-                      }
-                      className="w-10 h-10 sm:w-12 sm:h-12 object-contain bg-white rounded-lg p-1 shrink-0"
-                      alt=""
-                    />
-                    <div className="min-w-0">
-                      <div className="flex items-center flex-wrap gap-1">
-                        <h4 className="text-xs sm:text-sm font-bold truncate">
-                          {item.name}
-                        </h4>
-                      </div>
-                      <p className="text-[9px] sm:text-[10px] text-gray-400 font-black mt-0.5">
-                        ₹{item.price} × {item.qty}
-                        {item.mrp && item.mrp > item.price && (
-                          <span className="ml-1 line-through text-gray-300">
-                            ₹{item.mrp}
-                          </span>
-                        )}
-                      </p>
-                    </div>
+          {!order.isDelivered && !order.isCancelled && (
+            <button
+              disabled={btnLoading}
+              onClick={() => updateOrderStatus("cancel")}
+              className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 text-sm font-medium disabled:opacity-60"
+            >
+              Cancel
+            </button>
+          )}
+
+          {order.refundStatus === "Pending" && (
+            <button
+              disabled={btnLoading}
+              onClick={() => updateOrderStatus("refund")}
+              className="px-4 py-2 rounded-lg bg-orange-500 text-white hover:bg-orange-600 text-sm font-medium disabled:opacity-60"
+            >
+              Approve Refund
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Summary */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-white border rounded-xl p-4">
+          <div className="flex items-center gap-2 text-gray-500 text-sm mb-2">
+            <CreditCard size={16} /> Payment
+          </div>
+          <p className="font-semibold text-gray-800">
+            {order.isPaid ? "Paid" : "Unpaid"}
+          </p>
+          <p className="text-sm text-gray-500">{order.paymentMethod}</p>
+        </div>
+
+        <div className="bg-white border rounded-xl p-4">
+          <div className="flex items-center gap-2 text-gray-500 text-sm mb-2">
+            <Package size={16} /> Status
+          </div>
+          <p className="font-semibold text-gray-800">{order.orderStatus}</p>
+        </div>
+
+        <div className="bg-white border rounded-xl p-4">
+          <div className="flex items-center gap-2 text-gray-500 text-sm mb-2">
+            <Truck size={16} /> Delivery
+          </div>
+          <p className="font-semibold text-gray-800">
+            {order.isDelivered ? "Delivered" : "Pending"}
+          </p>
+        </div>
+
+        <div className="bg-white border rounded-xl p-4">
+          <div className="flex items-center gap-2 text-gray-500 text-sm mb-2">
+            <RefreshCcw size={16} /> Refund
+          </div>
+          <p className="font-semibold text-gray-800">{order.refundStatus}</p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Items */}
+        <div className="lg:col-span-2 bg-white border rounded-xl">
+          <div className="border-b px-4 py-3 flex justify-between items-center">
+            <h2 className="font-semibold text-gray-800">Order Items</h2>
+            <span className="text-sm text-gray-500">
+              {order.orderItems.length} item(s)
+            </span>
+          </div>
+
+          <div className="p-4 space-y-3">
+            {order.orderItems.map((item) => (
+              <div
+                key={item._id}
+                className="flex items-center justify-between border rounded-lg p-3 gap-3"
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className="w-14 h-14 object-contain bg-gray-50 rounded-lg p-1 border"
+                  />
+
+                  <div className="min-w-0">
+                    <h3 className="font-medium text-gray-800 truncate">
+                      {item.name}
+                    </h3>
+                    <p className="text-sm text-gray-500">
+                      ₹{item.price} × {item.qty}
+                    </p>
                   </div>
-                  <p className="font-black italic text-sm sm:text-base shrink-0">
-                    ₹{item.price * item.qty}
-                  </p>
                 </div>
-              ))}
-            </div>
+
+                <p className="font-semibold text-gray-900 whitespace-nowrap">
+                  ₹{item.price * item.qty}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
-        <div className="xl:w-80 2xl:w-96 space-y-4 sm:space-y-6">
-          <div className="bg-[#1A1A1A] p-6 sm:p-8 rounded-[36px] sm:rounded-[48px] text-white shadow-xl">
-            <p className="text-[10px] sm:text-[11px] font-black text-[#6FAF8E] uppercase mb-1 tracking-widest">
-              Total Revenue
+
+        {/* Right Sidebar */}
+        <div className="space-y-4">
+          <div className="bg-white border rounded-xl p-5">
+            <h2 className="font-semibold text-gray-800 mb-4">Customer</h2>
+
+            <p className="font-medium text-gray-900">
+              {order.user?.name || "Guest User"}
             </p>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black italic tracking-tighter mb-6 sm:mb-8">
-              ₹{order.totalPrice}
-            </h2>
-            <div className="space-y-3 sm:space-y-4 border-t border-white/10 pt-5 sm:pt-6 text-[10px] sm:text-[11px] font-bold uppercase tracking-widest">
-              <div className="flex justify-between text-gray-500">
-                <span>Subtotal</span>
-                <span className="text-white">₹{itemsPriceSum}</span>
-              </div>
-              <div className="flex justify-between text-gray-500 items-center">
-                <div className="flex items-center gap-1.5">
-                  <Truck size={12} className="text-gray-400" />
-                  <span>Delivery</span>
-                </div>
-                <span
-                  className={
-                    deliveryFee === 0 ? "text-[#6FAF8E]" : "text-white"
-                  }
-                >
-                  {deliveryFee === 0
-                    ? isPlusMember
-                      ? "FREE (Plus)"
-                      : "FREE"
-                    : `₹${deliveryFee}`}
-                </span>
-              </div>
-              <div className="flex justify-between items-center bg-white/5 p-3 sm:p-4 rounded-2xl">
-                <span className="text-[#6FAF8E]">Final Amount</span>
-                <span className="text-lg sm:text-xl font-black text-[#6FAF8E]">
-                  ₹{order.totalPrice}
-                </span>
-              </div>
+
+            <p className="text-sm text-gray-500 mt-1">
+              {order.user?.email}
+            </p>
+
+            <div className="flex items-center gap-2 text-sm text-gray-700 mt-3">
+              <Phone size={15} className="text-[#2E7D32]" />
+              {order.shippingAddress?.phone}
             </div>
           </div>
 
-          <div className="bg-white p-5 sm:p-8 rounded-[28px] sm:rounded-[40px] border border-gray-100 shadow-sm">
-            <MapPin className="text-[#6FAF8E] mb-3" size={18} />
-            <p className="text-[9px] sm:text-[10px] font-black uppercase text-gray-400">
-              Shipping To
-            </p>
-            <p className="text-xs sm:text-sm font-bold text-gray-800 leading-relaxed mb-3 mt-1">
+          <div className="bg-white border rounded-xl p-5">
+            <div className="flex items-center gap-2 mb-3">
+              <MapPin size={16} className="text-[#2E7D32]" />
+              <h2 className="font-semibold text-gray-800">Shipping Address</h2>
+            </div>
+
+            <p className="text-sm text-gray-700 leading-relaxed">
               {order.shippingAddress?.address}
               <br />
-              {order.shippingAddress?.city}, {order.shippingAddress?.postalCode}
+              {order.shippingAddress?.city},
+              {order.shippingAddress?.district}
+              <br />
+              {order.shippingAddress?.postalCode}
             </p>
-            <div className="flex items-center gap-2 text-[#6FAF8E] font-black text-xs">
-              <Phone size={12} /> {order.shippingAddress?.phone}
+          </div>
+
+          <div className="bg-white border rounded-xl p-5">
+            <h2 className="font-semibold text-gray-800 mb-4">Order Summary</h2>
+
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className="text-gray-600">Items</span>
+                <span>₹{order.itemsPrice || order.totalPrice}</span>
+              </div>
+
+              <div className="flex justify-between">
+                <span className="text-gray-600">Discount</span>
+                <span className="text-green-600">
+                  -₹{order.discount || 0}
+                </span>
+              </div>
+
+              <div className="flex justify-between">
+                <span className="text-gray-600">Delivery</span>
+                <span>₹{order.deliveryPrice || 0}</span>
+              </div>
+
+              <div className="border-t pt-3 flex justify-between font-bold text-base">
+                <span>Total</span>
+                <span className="text-[#2E7D32]">₹{order.totalPrice}</span>
+              </div>
             </div>
           </div>
 
-          <div className="bg-white p-5 sm:p-6 rounded-[28px] sm:rounded-[40px] border border-gray-100 shadow-sm space-y-3">
-            <div className="flex items-center gap-2 text-[10px] sm:text-xs font-bold text-gray-500">
-              <Calendar size={13} className="text-[#6FAF8E] shrink-0" />
-              <span>
-                Placed:{" "}
-                {new Date(order.createdAt).toLocaleDateString("en-IN", {
-                  day: "numeric",
-                  month: "short",
-                  year: "numeric",
-                })}
-              </span>
-            </div>
-            <div className="flex items-center gap-2 text-[10px] sm:text-xs font-bold text-gray-500">
-              <Clock size={13} className="text-[#6FAF8E] shrink-0" />
-              <span>
-                Time:{" "}
-                {new Date(order.createdAt).toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </span>
-            </div>
-            {order.isDelivered && order.deliveredAt && (
-              <div className="flex items-center gap-2 text-[10px] sm:text-xs font-bold text-green-600">
-                <CheckCircle size={13} className="shrink-0" />
-                <span>
-                  Delivered:{" "}
-                  {new Date(order.deliveredAt).toLocaleDateString("en-IN", {
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric",
-                  })}
-                </span>
+          <div className="bg-white border rounded-xl p-5">
+            <h2 className="font-semibold text-gray-800 mb-4">Timeline</h2>
+
+            <div className="space-y-3 text-sm text-gray-700">
+              <div className="flex items-start gap-2">
+                <Clock size={15} className="text-[#2E7D32] mt-0.5" />
+                <div>
+                  <p className="font-medium">Placed</p>
+                  <p className="text-gray-500">
+                    {new Date(order.createdAt).toLocaleString("en-IN")}
+                  </p>
+                </div>
               </div>
-            )}
+
+              {order.isDelivered && order.deliveredAt && (
+                <div className="flex items-start gap-2">
+                  <CheckCircle
+                    size={15}
+                    className="text-green-600 mt-0.5"
+                  />
+                  <div>
+                    <p className="font-medium">Delivered</p>
+                    <p className="text-gray-500">
+                      {new Date(order.deliveredAt).toLocaleString("en-IN")}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </main>
+      </div>
     </div>
-  );
+  </div>
+);
 };
 
 export default AdminOrderDetails;
