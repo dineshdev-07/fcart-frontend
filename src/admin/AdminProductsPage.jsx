@@ -171,7 +171,7 @@ const AdminProductsPage = () => {
                         ? "Please Wait..."
                         : product.isPinned
                           ? "Unpin"
-                          : "Pin to Homepage"}
+                          : "Pin"}
                     </button>
                   </div>
                 </div>

@@ -55,15 +55,15 @@ const ProductCard = ({ product, isLowestPriceItem = false }) => {
   return (
     <div
       onClick={() => navigate(`/product/${product._id}`)}
-      className="group cursor-pointer overflow-hidden rounded-2xl border border-blue-200/90"
+      className="group flex h-full flex-col cursor-pointer overflow-hidden rounded-2xl border border-blue-200/90"
     >
       {/* Product Image */}
-      <div className="relative bg-gray-50">
+      <div className="relative h-44 shrink-0 bg-gray-50">
         <img
           loading="lazy"
           src={product.images?.[0] || "https://via.placeholder.com/300"}
           alt={product.name}
-          className="h-44 w-full object-contain p-4"
+          className="h-full w-full object-contain p-4"
         />
 
         {/* Wishlist Button */}
@@ -84,28 +84,40 @@ const ProductCard = ({ product, isLowestPriceItem = false }) => {
       </div>
 
       {/* Product Info */}
-      <div className="p-4">
+      <div className="flex flex-1 flex-col p-4">
         <p className="text-xs font-medium uppercase tracking-wide text-gray-400 truncate">
           {product.brand || "FreshCart"}
         </p>
 
-        <h3 className="mt-1 h-10 line-clamp-2 text-sm font-semibold text-gray-800">
+        <h3 className="mt-1 h-10 line-clamp-2 text-sm font-semibold text-gray-800 ">
           {product.name}
         </h3>
 
         {/* Price */}
-        <div className="mt-3 flex items-center gap-2 flex-wrap">
-          <span className="text-lg font-bold text-gray-900">₹{finalPrice}</span>
+        <div className="mt-3">
+          {/* Main Price + MRP */}
+          <div className="flex items-center gap-2">
+            <span className="text-lg font-bold text-gray-900">
+              ₹{finalPrice}
+            </span>
 
-          {mrp > finalPrice && (
-            <>
+            {mrp > finalPrice && (
               <span className="text-sm text-gray-400 line-through">₹{mrp}</span>
+            )}
+          </div>
 
-              <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-semibold text-green-700">
+          {/* Discount / Offer Badge */}
+          <div className="mt-1 h-6 flex items-center">
+            {mrp > finalPrice ? (
+              <span className="inline-flex rounded-full bg-green-100 px-2 py-0.5 text-xs font-semibold text-green-700">
                 {totalDiscount}% OFF
               </span>
-            </>
-          )}
+            ) : (
+              <span className="inline-flex rounded-full bg-blue-100 px-2 py-0.5 text-xs font-semibold text-blue-700">
+                ✓ Best Price
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Plus Badge */}

@@ -91,12 +91,13 @@ const AdminOrderDetails = () => {
     }
   };
 
-  if (loading)
+  if (loading) {
     return (
-      <div className="h-screen flex items-center justify-center font-black text-[#6FAF8E] animate-pulse text-sm tracking-widest">
-        Syncing Admin Portal...
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin h-10 w-10 border-t-2 border-b-2 border-[#6FAF8E] rounded-full"></div>
       </div>
     );
+  }
   if (error || !order)
     return (
       <div className="h-screen flex flex-col items-center justify-center p-6 gap-4">

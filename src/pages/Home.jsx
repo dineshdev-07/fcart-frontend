@@ -440,20 +440,20 @@ const Home = ({ search = "" }) => {
 
       <footer className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] bg-[#EFF3F1] text-[#2E7D32] pt-8 sm:pt-12 md:pt-16 pb-5 sm:pb-8 mt-10 sm:mt-14 md:mt-20 overflow-hidden border border-blue-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 grid grid-cols-1 sm:grid-cols-3  sm:gap-8 md:gap-10">
-          <div className="space-y-2 sm:space-y-3 text-center sm:text-left">
+          <div className="space-y-2 sm:space-y-3 sm:text-left">
             <h2 className="text-lg sm:text-xl md:text-2xl font-black  tracking-tight">
               FreshCart
             </h2>
-            <p className="text-[11px] sm:text-xs md:text-sm  leading-relaxed max-w-[220px] mx-auto sm:mx-0">
+            <p className="text-[11px] sm:text-xs md:text-sm  leading-relaxed max-w-[220px]  sm:mx-0">
               Your destination for farm-fresh produce. Quality you can taste.
             </p>
           </div>
 
-          <div className="text-center sm:text-left">
-            <h3 className=" font-bold mb-3 sm:mb-4 uppercase text-[10px] sm:text-xs tracking-widest">
+          <div className=" sm:text-left">
+            <h3 className=" font-bold mb-2 mt-2 sm:mb-4 uppercase text-[10px] sm:text-xs tracking-widest">
               Explore
             </h3>
-            <ul className="text-[11px] sm:text-xs md:text-sm space-y-2 sm:space-y-3">
+            <ul className="text-[11px] sm:text-xs md:text-sm space-y-2">
               <li>
                 <button
                   onClick={() =>
@@ -479,8 +479,8 @@ const Home = ({ search = "" }) => {
             </ul>
           </div>
 
-          <div className="text-center sm:text-left">
-            <h3 className=" font-bold mb-3 sm:mb-4 uppercase text-[10px] sm:text-xs tracking-widest">
+          <div className=" sm:text-left">
+            <h3 className=" font-bold mb-2 mt-2 sm:mb-4 uppercase text-[10px] sm:text-xs tracking-widest">
               Support
             </h3>
             <div className="text-[11px] sm:text-xs md:text-sm space-y-1.5 sm:space-y-2 ">
@@ -491,13 +491,11 @@ const Home = ({ search = "" }) => {
                 <span className="">Call:</span> +91 78100 70xxx
               </p>
             </div>
-          </div>
-        </div>
-        <div className="max-w-7xl m-auto px-4 sm:px-6 md:px-8 border-t border-blue-200  sm:mt-10 md:mt-8 pt-4 sm:pt-5 flex flex-col xs:flex-row justify-between items-center gap-3">
-          <p className="text-[14px] sm:text-[9px] md:text-[10px] tracking-widest uppercase text-center">
-            @Copyright {new Date().getFullYear()} FreshCart. All Rights
+          <p className="text-[10px] pt-2">
+            @Copyright 2026 FreshCart. All Rights
             Reserved.
           </p>
+          </div>
         </div>
       </footer>
     </div>
