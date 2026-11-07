@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Package,
   Tag,
@@ -40,7 +40,7 @@ const FIELDS = [
     type: "text",
     required: true,
   },
-  { key: "brand", label: "Brand", icon: Tag, type: "text", required: false },
+  { key: "brand", label: "Brand", icon: Tag, type: "text", required: true },
   {
     key: "category",
     label: "Category",
@@ -104,50 +104,127 @@ function Admin() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+  const submitLock = useRef(false);
+  const previewUrlRef = useRef(null);
+  const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
   const handleFile = (e) => {
-    const file = e.target.files[0];
+    const file = e.target.files?.[0];
     if (!file) return;
+
+    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+      alert("Only JPG, PNG and WEBP images are allowed");
+      e.target.value = "";
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Image size must be below 5MB");
+      e.target.value = "";
+      return;
+    }
+
+    if (previewUrlRef.current) {
+      URL.revokeObjectURL(previewUrlRef.current);
+    }
+
+    const url = URL.createObjectURL(file);
+    previewUrlRef.current = url;
+
     setSelectedFile(file);
-    setPreview(URL.createObjectURL(file));
+    setPreview(url);
   };
+  useEffect(() => {
+    return () => {
+      if (previewUrlRef.current) {
+        URL.revokeObjectURL(previewUrlRef.current);
+      }
+    };
+  }, []);
 
   const submitHandler = async (e) => {
     e.preventDefault();
+
+    if (submitLock.current) return;
+
+    if (!selectedFile) {
+      alert("Please upload a product image");
+      return;
+    }
+
+    const mrp = Number(formData.price);
+    const salePrice = Number(formData.discountedPrice);
+    const stock = Number(formData.quantity);
+
+    if (!Number.isFinite(mrp) || mrp <= 0) {
+      alert("Enter a valid MRP price");
+      return;
+    }
+
+    if (
+      formData.discountedPrice &&
+      (!Number.isFinite(salePrice) || salePrice <= 0 || salePrice > mrp)
+    ) {
+      alert("Discounted price must be positive and cannot exceed MRP");
+      return;
+    }
+
+    if (!Number.isInteger(stock) || stock < 0) {
+      alert("Enter a valid stock quantity");
+      return;
+    }
+
+    submitLock.current = true;
     setSubmitting(true);
 
     try {
       const fd = new FormData();
 
       Object.entries(formData).forEach(([key, value]) => {
-        if (key !== "images") fd.append(key, value);
+        if (key !== "images") {
+          fd.append(key, value);
+        }
       });
 
-      if (selectedFile) fd.append("image", selectedFile);
+      fd.append("image", selectedFile);
 
       const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
 
-      const authConfig = {
+      if (!userInfo.token) {
+        throw new Error("Please login again");
+      }
+
+      await axios.post(`${API}/api/products`, fd, {
         withCredentials: true,
         headers: {
-          Authorization: `Bearer ${userInfo?.token}`,
-        },
-      };
-      await axios.post(`${API}/api/products`, fd, {
-        ...authConfig,
-        headers: {
-          ...authConfig.headers,
-          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${userInfo.token}`,
         },
       });
-      alert("✅ Product added successfully");
+
+      alert("Product added successfully");
+
       setFormData(EMPTY_FORM);
       setSelectedFile(null);
+
+      if (previewUrlRef.current) {
+        URL.revokeObjectURL(previewUrlRef.current);
+        previewUrlRef.current = null;
+      }
+
       setPreview(null);
+
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
     } catch (error) {
-      alert(error?.response?.data?.message || "❌ Not authorized");
+      alert(
+        error?.response?.data?.message ||
+          error.message ||
+          "Unable to add product",
+      );
     } finally {
+      submitLock.current = false;
       setSubmitting(false);
     }
   };
@@ -155,20 +232,20 @@ function Admin() {
   const set = (key, val) => setFormData((prev) => ({ ...prev, [key]: val }));
 
   return (
-    <div className="min-h-screen bg-[#EFF3F1] p-5 rounded-2xl border border-blue-200">
+    <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 md:px-6 pb-8 pt-8 ">
       {/* Header */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6 mb-8  gap-2">
+      <div className="bg-white rounded-xl border border-gray-300 p-6 mb-8  gap-2">
         <h1 className="text-2xl font-bold text-[#2E7D32]">Add Product</h1>
         <p className="text-gray-500 text-sm mt-1">
           Create a new product for your store.
         </p>
       </div>
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         <form onSubmit={submitHandler}>
           <div className="grid lg:grid-cols-3 gap-4">
             {/* LEFT */}
             <div className="lg:col-span-2">
-              <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <div className="bg-white rounded-xl border border-gray-300 p-6">
                 <h2 className="text-lg font-semibold text-gray-800 mb-6">
                   Product Information
                 </h2>
@@ -191,6 +268,8 @@ function Admin() {
 
                         <input
                           type={type}
+                          min={type === "number" ? 0 : undefined}
+                          step={key === "quantity" ? 1 : "0.01"}
                           required={required}
                           value={formData[key]}
                           onChange={(e) => set(key, e.target.value)}
@@ -223,7 +302,7 @@ function Admin() {
             {/* RIGHT SIDE */}
             <div className="space-y-6">
               {/* Upload Image */}
-              <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <div className="bg-white rounded-xl border border-gray-300 p-6">
                 <h2 className="text-lg font-semibold text-gray-800 mb-5">
                   Product Image
                 </h2>
@@ -260,8 +339,10 @@ function Admin() {
                   )}
 
                   <input
+                    ref={fileInputRef}
                     type="file"
-                    accept="image/*"
+                    accept="image/jpeg,image/png,image/webp"
+                    required={!selectedFile}
                     className="hidden"
                     onChange={handleFile}
                   />
@@ -271,8 +352,17 @@ function Admin() {
                   <button
                     type="button"
                     onClick={() => {
+                      if (previewUrlRef.current) {
+                        URL.revokeObjectURL(previewUrlRef.current);
+                        previewUrlRef.current = null;
+                      }
+
                       setPreview(null);
                       setSelectedFile(null);
+
+                      if (fileInputRef.current) {
+                        fileInputRef.current.value = "";
+                      }
                     }}
                     className="mt-4 w-full py-2 rounded-lg border border-red-200 text-red-600 hover:bg-red-50 transition"
                   >
@@ -284,7 +374,7 @@ function Admin() {
               {/* Pricing Summary */}
 
               {(formData.price || formData.discountedPrice) && (
-                <div className="bg-white rounded-xl border border-gray-200 p-6">
+                <div className="bg-white rounded-xl border border-gray-300 p-6">
                   <h2 className="text-lg font-semibold text-gray-800 mb-5">
                     Pricing Summary
                   </h2>
@@ -324,7 +414,7 @@ function Admin() {
                 </div>
               )}
               {/* Action Buttons */}
-              <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <div className="bg-white rounded-xl border border-gray-300 p-6">
                 <div className="flex flex-col gap-3">
                   <button
                     type="submit"

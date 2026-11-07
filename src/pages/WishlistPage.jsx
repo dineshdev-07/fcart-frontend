@@ -49,7 +49,7 @@ const WishlistProductCard = ({
   return (
     <div
       onClick={() => navigate(`/product/${product._id}`)}
-      className="relative bg-white rounded-xl border border-gray-200 hover:shadow-md transition overflow-hidden cursor-pointer flex flex-col"
+      className="relative bg-white rounded-xl border border-gray-300 hover:shadow-md transition overflow-hidden cursor-pointer flex flex-col"
     >
       {/* Heart button */}
       <button
@@ -166,8 +166,8 @@ const WishlistPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#EFF3F1] p-5 rounded-2xl border border-blue-200">
-      <div className="bg-white rounded-xl border border-gray-200 p-6 mb-8 flex justify-between">
+    <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 md:px-6 pb-8 pt-8 ">
+      <div className="bg-white rounded-xl border border-gray-300 p-6 mb-8 flex justify-between">
         <h1 className="text-2xl font-bold text-[#2E7D32]">Wishlist</h1>
         <span className="bg-green-100 text-green-700 px-4 py-2 rounded-full font-medium">
           {products.length} Item(s)

@@ -154,10 +154,10 @@ function AdminOrders() {
   }
 
   return (
-    <div className="min-h-screen bg-[#EFF3F1] p-5 rounded-2xl border border-blue-200">
+    <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 md:px-6 pb-8 pt-8 ">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 mb-6 sm:mb-8">
+        <div className="bg-white rounded-xl border border-gray-300 p-4 sm:p-6 mb-6 sm:mb-8">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             {/* Title */}
             <div>
@@ -338,11 +338,7 @@ function AdminOrders() {
               })
             ) : (
               <div className="text-center mt-20">
-                <h2 className="text-xl font-semibold">
-                  No Orders Found
-                </h2>
-
-              
+                <h2 className="text-xl font-semibold">No Orders Found</h2>
               </div>
             )}
           </div>

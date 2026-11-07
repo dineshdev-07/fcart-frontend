@@ -7,7 +7,6 @@ import { useWishlist } from "../context/WishlistContext";
 import { calculateDiscountedPrice } from "../utils/offerUtils";
 import { Heart } from "lucide-react";
 
-
 const API = import.meta.env.VITE_API_URL;
 
 /* ── Mini product card matching ProductCard UI ── */
@@ -48,7 +47,7 @@ const CategoryProductCard = ({ product, isLowestPriceItem = false }) => {
   return (
     <div
       onClick={() => navigate(`/product/${product._id}`)}
-      className="group relative bg-white rounded-xl border border-gray-200 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 cursor-pointer overflow-hidden flex flex-col w-full"
+      className="group relative bg-white rounded-xl border border-gray-300 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 cursor-pointer overflow-hidden flex flex-col w-full"
     >
       {/* Wishlist */}
       <button
@@ -98,7 +97,7 @@ const CategoryProductCard = ({ product, isLowestPriceItem = false }) => {
         <p className="text-[8px] xs:text-[9px] sm:text-[10px] uppercase text-gray-400 font-semibold truncate">
           {product.brand || "Brand"}
         </p>
-        <h3 className="text-[11px] xs:text-xs sm:text-[13px] md:text-sm text-gray-800 font-medium truncate group-hover:text-[#6FAF8E] mt-0.5">
+        <h3 className="text-[11px] xs:text-xs sm:text-[13px] md:text-sm text-gray-800 font-medium truncate group-hover:text-green-600 mt-0.5">
           {product.name}
         </h3>
 

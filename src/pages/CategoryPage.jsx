@@ -59,7 +59,7 @@ const CategoryPage = () => {
   return (
     <div className="min-h-screen bg-[#EFF3F1] p-5 rounded-2xl">
       {/* Header */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6 mb-5 flex">
+      <div className="bg-white rounded-xl border border-gray-300 p-6 mb-5 flex">
         <button
           onClick={() => navigate(-1)}
           className="p-4 hover:bg-gray-100 rounded-xl text-gray-500 transition"

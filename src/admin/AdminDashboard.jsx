@@ -102,10 +102,10 @@ const AdminDashboard = () => {
     );
 
   return (
-    <div className="min-h-screen bg-[#EFF3F1] p-5 rounded-2xl border border-blue-200">
+    <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 md:px-6 pb-8 pt-8 ">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6 mb-8">
+        <div className="bg-white rounded-xl border border-gray-300 p-6 mb-8">
           <h1 className="text-2xl font-bold text-[#2E7D32]">Admin Dashboard</h1>
 
           <p className="text-gray-500 mt-2">
@@ -143,7 +143,7 @@ const AdminDashboard = () => {
 
         {/* Business Summary */}
 
-        <div className="bg-white rounded-xl border border-gray-200 p-5 mb-8">
+        <div className="bg-white rounded-xl border border-gray-300 p-5 mb-8">
           <h2 className="text-lg font-semibold text-gray-700 mb-4">
             Business Summary
           </h2>
@@ -170,7 +170,7 @@ const AdminDashboard = () => {
 
         {/* Low Stock */}
 
-        <div className="bg-white rounded-xl border border-gray-200">
+        <div className="bg-white rounded-xl border border-gray-300">
           <div className="flex justify-between items-center p-5 border-b">
             <div>
               <h2 className="text-lg font-semibold text-gray-700">
@@ -213,7 +213,7 @@ const AdminDashboard = () => {
         {/* Expiry Timeline */}
 
         {/* Expiry Timeline */}
-        <div className="bg-white rounded-xl border border-gray-200 mt-8">
+        <div className="bg-white rounded-xl border border-gray-300 mt-8">
           <div className="p-5 border-b">
             <h2 className="text-lg font-semibold text-gray-700">
               Expiry Timeline
@@ -273,7 +273,7 @@ const AdminDashboard = () => {
 
 const StatCard = ({ title, value, icon }) => {
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-5 hover:border-[#2E7D32] transition">
+    <div className="bg-white border border-gray-300 rounded-xl p-5 hover:border-[#2E7D32] transition">
       <div className="flex justify-between items-center mb-4">
         <p className="text-sm text-gray-500">{title}</p>
 
@@ -287,7 +287,7 @@ const StatCard = ({ title, value, icon }) => {
 
 const MiniCard = ({ title, value }) => {
   return (
-    <div className="bg-[#F8F8F8] border border-gray-200 rounded-xl p-4 text-center">
+    <div className="bg-[#F8F8F8] border border-gray-300 rounded-xl p-4 text-center">
       <p className="text-sm text-gray-500">{title}</p>
 
       <h3 className="text-2xl font-bold text-[#2E7D32] mt-2">{value}</h3>

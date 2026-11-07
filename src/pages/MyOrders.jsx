@@ -81,9 +81,9 @@ const MyOrders = () => {
   }
 
   return (
-    <div className="min-h-screen p-5 rounded-2xl bg-[#EFF3F1] border border-blue-200">
+    <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 md:px-6 pb-8 pt-8 ">
       {/* Header */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6 mb-8 flex gap-5">
+      <div className="bg-white rounded-xl border border-gray-300 p-6 mb-8 flex gap-5">
         <div className="h-12 w-12 rounded-xl bg-[#2F7D32] flex items-center justify-center">
           <Package className="text-white w-6 h-6" />
         </div>
@@ -107,7 +107,7 @@ const MyOrders = () => {
             ))}
           </div>
         ) : orders.length === 0 ? (
-          <div className="bg-white rounded-3xl border border-[#DDEFD8] p-16 text-center">
+          <div className="bg-white  p-16 text-center">
             <div className="text-6xl mb-4">📦</div>
 
             <h2 className="text-2xl font-bold text-gray-800">No Orders Yet</h2>

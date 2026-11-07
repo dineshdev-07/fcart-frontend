@@ -82,11 +82,11 @@ const AdminProductsPage = () => {
   const isFull = pinnedCount >= 50;
 
   return (
-    <div className="min-h-screen bg-[#EFF3F1] p-5 rounded-2xl border border-blue-200">
+    <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 md:px-6 pb-8 pt-8 ">
       <div className="max-w-7xl mx-auto px-5">
         {/* Header */}
 
-        <div className="bg-white rounded-xl border border-gray-200 p-6 mb-8 flex justify-between">
+        <div className="bg-white rounded-xl border border-gray-300 p-6 mb-8 flex justify-between">
           <div className="flex">
             <button
               onClick={() => navigate(-1)}
@@ -130,7 +130,7 @@ const AdminProductsPage = () => {
               return (
                 <div
                   key={product._id}
-                  className={`relative rounded-xl border overflow-hidden bg-white shadow-sm transition border-gray-200`}
+                  className={`relative rounded-xl border overflow-hidden bg-white shadow-sm transition border-gray-300`}
                 >
                   {/* Image */}
 

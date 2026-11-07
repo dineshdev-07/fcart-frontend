@@ -16,7 +16,7 @@ const API = import.meta.env.VITE_API_URL;
 const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
 
 const Section = ({ title, children }) => (
-  <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+  <div className="bg-white rounded-xl border border-gray-300 p-5 shadow-sm">
     <h2 className="text-lg font-semibold text-green-700 mb-4">{title}</h2>
 
     {children}
@@ -134,7 +134,7 @@ const OrderDetails = () => {
     <div className="min-h-screen bg-[#EFF3F1] p-5 rounded-2xl">
       {/* Header */}
 
-      <div className="bg-white rounded-xl border border-gray-200 p-6 mb-8 flex gap-2">
+      <div className="bg-white rounded-xl border border-gray-300 p-6 mb-8 flex gap-2">
         <div>
           <button
             onClick={() => navigate(-1)}

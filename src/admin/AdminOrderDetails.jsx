@@ -151,237 +151,233 @@ const AdminOrderDetails = () => {
     },
   ].filter((s) => s.show);
 
- return (
-   <div className="min-h-screen bg-[#EFF3F1] p-5 rounded-2xl border border-blue-200">
-    <div className="max-w-6xl mx-auto space-y-6">
-      {/* Header */}
-      <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 flex flex-col sm:flex-row justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => navigate(-1)}
-            className="p-2 rounded-lg hover:bg-gray-100 text-[#2E7D32]"
-          >
-            <ChevronLeft size={20} />
-          </button>
-
-          <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-[#2E7D32]">
-              Order Details
-            </h1>
-            <p className="text-xs text-gray-500 font-mono">
-              {order._id}
-            </p>
-          </div>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          {!order.isDelivered && !order.isCancelled && (
+  return (
+    <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 md:px-6 pb-8 pt-8 ">
+      <div className="max-w-6xl mx-auto space-y-6">
+        {/* Header */}
+        <div className="bg-white rounded-xl border border-gray-300 p-4 sm:p-6 flex flex-col sm:flex-row justify-between gap-4">
+          <div className="flex items-center gap-3">
             <button
-              disabled={btnLoading}
-              onClick={() => updateOrderStatus("deliver")}
-              className="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 text-sm font-medium disabled:opacity-60"
+              onClick={() => navigate(-1)}
+              className="p-2 rounded-lg hover:bg-gray-100 text-[#2E7D32]"
             >
-              Mark Delivered
+              <ChevronLeft size={20} />
             </button>
-          )}
 
-          {!order.isDelivered && !order.isCancelled && (
-            <button
-              disabled={btnLoading}
-              onClick={() => updateOrderStatus("cancel")}
-              className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 text-sm font-medium disabled:opacity-60"
-            >
-              Cancel
-            </button>
-          )}
-
-          {order.refundStatus === "Pending" && (
-            <button
-              disabled={btnLoading}
-              onClick={() => updateOrderStatus("refund")}
-              className="px-4 py-2 rounded-lg bg-orange-500 text-white hover:bg-orange-600 text-sm font-medium disabled:opacity-60"
-            >
-              Approve Refund
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* Summary */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white border rounded-xl p-4">
-          <div className="flex items-center gap-2 text-gray-500 text-sm mb-2">
-            <CreditCard size={16} /> Payment
-          </div>
-          <p className="font-semibold text-gray-800">
-            {order.isPaid ? "Paid" : "Unpaid"}
-          </p>
-          <p className="text-sm text-gray-500">{order.paymentMethod}</p>
-        </div>
-
-        <div className="bg-white border rounded-xl p-4">
-          <div className="flex items-center gap-2 text-gray-500 text-sm mb-2">
-            <Package size={16} /> Status
-          </div>
-          <p className="font-semibold text-gray-800">{order.orderStatus}</p>
-        </div>
-
-        <div className="bg-white border rounded-xl p-4">
-          <div className="flex items-center gap-2 text-gray-500 text-sm mb-2">
-            <Truck size={16} /> Delivery
-          </div>
-          <p className="font-semibold text-gray-800">
-            {order.isDelivered ? "Delivered" : "Pending"}
-          </p>
-        </div>
-
-        <div className="bg-white border rounded-xl p-4">
-          <div className="flex items-center gap-2 text-gray-500 text-sm mb-2">
-            <RefreshCcw size={16} /> Refund
-          </div>
-          <p className="font-semibold text-gray-800">{order.refundStatus}</p>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Items */}
-        <div className="lg:col-span-2 bg-white border rounded-xl">
-          <div className="border-b px-4 py-3 flex justify-between items-center">
-            <h2 className="font-semibold text-gray-800">Order Items</h2>
-            <span className="text-sm text-gray-500">
-              {order.orderItems.length} item(s)
-            </span>
+            <div>
+              <h1 className="text-xl sm:text-2xl font-bold text-[#2E7D32]">
+                Order Details
+              </h1>
+              <p className="text-xs text-gray-500 font-mono">{order._id}</p>
+            </div>
           </div>
 
-          <div className="p-4 space-y-3">
-            {order.orderItems.map((item) => (
-              <div
-                key={item._id}
-                className="flex items-center justify-between border rounded-lg p-3 gap-3"
+          <div className="flex flex-wrap gap-2">
+            {!order.isDelivered && !order.isCancelled && (
+              <button
+                disabled={btnLoading}
+                onClick={() => updateOrderStatus("deliver")}
+                className="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 text-sm font-medium disabled:opacity-60"
               >
-                <div className="flex items-center gap-3 min-w-0">
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-14 h-14 object-contain bg-gray-50 rounded-lg p-1 border"
-                  />
+                Mark Delivered
+              </button>
+            )}
 
-                  <div className="min-w-0">
-                    <h3 className="font-medium text-gray-800 truncate">
-                      {item.name}
-                    </h3>
-                    <p className="text-sm text-gray-500">
-                      ₹{item.price} × {item.qty}
-                    </p>
-                  </div>
-                </div>
+            {!order.isDelivered && !order.isCancelled && (
+              <button
+                disabled={btnLoading}
+                onClick={() => updateOrderStatus("cancel")}
+                className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 text-sm font-medium disabled:opacity-60"
+              >
+                Cancel
+              </button>
+            )}
 
-                <p className="font-semibold text-gray-900 whitespace-nowrap">
-                  ₹{item.price * item.qty}
-                </p>
-              </div>
-            ))}
+            {order.refundStatus === "Pending" && (
+              <button
+                disabled={btnLoading}
+                onClick={() => updateOrderStatus("refund")}
+                className="px-4 py-2 rounded-lg bg-orange-500 text-white hover:bg-orange-600 text-sm font-medium disabled:opacity-60"
+              >
+                Approve Refund
+              </button>
+            )}
           </div>
         </div>
 
-        {/* Right Sidebar */}
-        <div className="space-y-4">
-          <div className="bg-white border rounded-xl p-5">
-            <h2 className="font-semibold text-gray-800 mb-4">Customer</h2>
-
-            <p className="font-medium text-gray-900">
-              {order.user?.name || "Guest User"}
-            </p>
-
-            <p className="text-sm text-gray-500 mt-1">
-              {order.user?.email}
-            </p>
-
-            <div className="flex items-center gap-2 text-sm text-gray-700 mt-3">
-              <Phone size={15} className="text-[#2E7D32]" />
-              {order.shippingAddress?.phone}
+        {/* Summary */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="bg-white border rounded-xl p-4">
+            <div className="flex items-center gap-2 text-gray-500 text-sm mb-2">
+              <CreditCard size={16} /> Payment
             </div>
+            <p className="font-semibold text-gray-800">
+              {order.isPaid ? "Paid" : "Unpaid"}
+            </p>
+            <p className="text-sm text-gray-500">{order.paymentMethod}</p>
           </div>
 
-          <div className="bg-white border rounded-xl p-5">
-            <div className="flex items-center gap-2 mb-3">
-              <MapPin size={16} className="text-[#2E7D32]" />
-              <h2 className="font-semibold text-gray-800">Shipping Address</h2>
+          <div className="bg-white border rounded-xl p-4">
+            <div className="flex items-center gap-2 text-gray-500 text-sm mb-2">
+              <Package size={16} /> Status
             </div>
+            <p className="font-semibold text-gray-800">{order.orderStatus}</p>
+          </div>
 
-            <p className="text-sm text-gray-700 leading-relaxed">
-              {order.shippingAddress?.address}
-              <br />
-              {order.shippingAddress?.city},
-              {order.shippingAddress?.district}
-              <br />
-              {order.shippingAddress?.postalCode}
+          <div className="bg-white border rounded-xl p-4">
+            <div className="flex items-center gap-2 text-gray-500 text-sm mb-2">
+              <Truck size={16} /> Delivery
+            </div>
+            <p className="font-semibold text-gray-800">
+              {order.isDelivered ? "Delivered" : "Pending"}
             </p>
           </div>
 
-          <div className="bg-white border rounded-xl p-5">
-            <h2 className="font-semibold text-gray-800 mb-4">Order Summary</h2>
-
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Items</span>
-                <span>₹{order.itemsPrice || order.totalPrice}</span>
-              </div>
-
-              <div className="flex justify-between">
-                <span className="text-gray-600">Discount</span>
-                <span className="text-green-600">
-                  -₹{order.discount || 0}
-                </span>
-              </div>
-
-              <div className="flex justify-between">
-                <span className="text-gray-600">Delivery</span>
-                <span>₹{order.deliveryPrice || 0}</span>
-              </div>
-
-              <div className="border-t pt-3 flex justify-between font-bold text-base">
-                <span>Total</span>
-                <span className="text-[#2E7D32]">₹{order.totalPrice}</span>
-              </div>
+          <div className="bg-white border rounded-xl p-4">
+            <div className="flex items-center gap-2 text-gray-500 text-sm mb-2">
+              <RefreshCcw size={16} /> Refund
             </div>
+            <p className="font-semibold text-gray-800">{order.refundStatus}</p>
           </div>
+        </div>
 
-          <div className="bg-white border rounded-xl p-5">
-            <h2 className="font-semibold text-gray-800 mb-4">Timeline</h2>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Items */}
+          <div className="lg:col-span-2 bg-white border rounded-xl">
+            <div className="border-b px-4 py-3 flex justify-between items-center">
+              <h2 className="font-semibold text-gray-800">Order Items</h2>
+              <span className="text-sm text-gray-500">
+                {order.orderItems.length} item(s)
+              </span>
+            </div>
 
-            <div className="space-y-3 text-sm text-gray-700">
-              <div className="flex items-start gap-2">
-                <Clock size={15} className="text-[#2E7D32] mt-0.5" />
-                <div>
-                  <p className="font-medium">Placed</p>
-                  <p className="text-gray-500">
-                    {new Date(order.createdAt).toLocaleString("en-IN")}
+            <div className="p-4 space-y-3">
+              {order.orderItems.map((item) => (
+                <div
+                  key={item._id}
+                  className="flex items-center justify-between border rounded-lg p-3 gap-3"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-14 h-14 object-contain bg-gray-50 rounded-lg p-1 border"
+                    />
+
+                    <div className="min-w-0">
+                      <h3 className="font-medium text-gray-800 truncate">
+                        {item.name}
+                      </h3>
+                      <p className="text-sm text-gray-500">
+                        ₹{item.price} × {item.qty}
+                      </p>
+                    </div>
+                  </div>
+
+                  <p className="font-semibold text-gray-900 whitespace-nowrap">
+                    ₹{item.price * item.qty}
                   </p>
                 </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right Sidebar */}
+          <div className="space-y-4">
+            <div className="bg-white border rounded-xl p-5">
+              <h2 className="font-semibold text-gray-800 mb-4">Customer</h2>
+
+              <p className="font-medium text-gray-900">
+                {order.user?.name || "Guest User"}
+              </p>
+
+              <p className="text-sm text-gray-500 mt-1">{order.user?.email}</p>
+
+              <div className="flex items-center gap-2 text-sm text-gray-700 mt-3">
+                <Phone size={15} className="text-[#2E7D32]" />
+                {order.shippingAddress?.phone}
+              </div>
+            </div>
+
+            <div className="bg-white border rounded-xl p-5">
+              <div className="flex items-center gap-2 mb-3">
+                <MapPin size={16} className="text-[#2E7D32]" />
+                <h2 className="font-semibold text-gray-800">
+                  Shipping Address
+                </h2>
               </div>
 
-              {order.isDelivered && order.deliveredAt && (
+              <p className="text-sm text-gray-700 leading-relaxed">
+                {order.shippingAddress?.address}
+                <br />
+                {order.shippingAddress?.city},{order.shippingAddress?.district}
+                <br />
+                {order.shippingAddress?.postalCode}
+              </p>
+            </div>
+
+            <div className="bg-white border rounded-xl p-5">
+              <h2 className="font-semibold text-gray-800 mb-4">
+                Order Summary
+              </h2>
+
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Items</span>
+                  <span>₹{order.itemsPrice || order.totalPrice}</span>
+                </div>
+
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Discount</span>
+                  <span className="text-green-600">
+                    -₹{order.discount || 0}
+                  </span>
+                </div>
+
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Delivery</span>
+                  <span>₹{order.deliveryPrice || 0}</span>
+                </div>
+
+                <div className="border-t pt-3 flex justify-between font-bold text-base">
+                  <span>Total</span>
+                  <span className="text-[#2E7D32]">₹{order.totalPrice}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white border rounded-xl p-5">
+              <h2 className="font-semibold text-gray-800 mb-4">Timeline</h2>
+
+              <div className="space-y-3 text-sm text-gray-700">
                 <div className="flex items-start gap-2">
-                  <CheckCircle
-                    size={15}
-                    className="text-green-600 mt-0.5"
-                  />
+                  <Clock size={15} className="text-[#2E7D32] mt-0.5" />
                   <div>
-                    <p className="font-medium">Delivered</p>
+                    <p className="font-medium">Placed</p>
                     <p className="text-gray-500">
-                      {new Date(order.deliveredAt).toLocaleString("en-IN")}
+                      {new Date(order.createdAt).toLocaleString("en-IN")}
                     </p>
                   </div>
                 </div>
-              )}
+
+                {order.isDelivered && order.deliveredAt && (
+                  <div className="flex items-start gap-2">
+                    <CheckCircle size={15} className="text-green-600 mt-0.5" />
+                    <div>
+                      <p className="font-medium">Delivered</p>
+                      <p className="text-gray-500">
+                        {new Date(order.deliveredAt).toLocaleString("en-IN")}
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-);
+  );
 };
 
 export default AdminOrderDetails;

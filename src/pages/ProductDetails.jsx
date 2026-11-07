@@ -65,7 +65,6 @@ const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
-
   const [product, setProduct] = useState(null);
   const [similarProducts, setSimilarProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -80,7 +79,6 @@ const ProductDetails = () => {
   const [dbUser, setDbUser] = useState(null);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [showAddressForm, setShowAddressForm] = useState(false);
-  const [locating, setLocating] = useState(false);
   const [addressInput, setAddressInput] = useState({
     fullAddress: "",
     pinCode: "",
@@ -172,30 +170,6 @@ const ProductDetails = () => {
     }
   }, [showAdminEdit, product]);
 
-  const handleAdminUpdate = async () => {
-    try {
-      await axios.put(
-        `${API}/api/products/update/${product._id}`,
-        {
-          quantity: Number(editQuantity),
-          manufacturingDate: editMfgDate,
-          expiryDate: editExpDate,
-          brand: editBrand,
-          price: Number(editPrice),
-          discountedPrice: Number(editDiscountedPrice),
-        },
-        config,
-      );
-      alert("Product Updated Successfully");
-      setShowAdminEdit(false);
-      const { data } = await axios.get(`${API}/api/products/${id}`, config);
-      setProduct(data);
-    } catch (err) {
-      console.log(err.response?.data);
-      alert(err.response?.data?.message || "Update Failed");
-    }
-  };
-
   const saveNewAddress = async () => {
     if (
       !addressInput.fullAddress ||
@@ -250,19 +224,6 @@ const ProductDetails = () => {
     }
   };
 
-  const deleteAddress = async (addrId) => {
-    try {
-      const { data } = await axios.delete(
-        `${API}/api/users/address/${addrId}`,
-        config,
-      );
-      setDbUser({ ...dbUser, addresses: data });
-      if (selectedAddress?._id === addrId) setSelectedAddress(data[0] || null);
-    } catch {
-      alert("Delete failed");
-    }
-  };
-
   const { finalPrice, totalDiscount, appliedLabel, mrp, offerDetails } =
     useMemo(() => {
       if (!product)
@@ -299,130 +260,9 @@ const ProductDetails = () => {
 
   const deliveryCharge = calculateDeliveryCharge(finalPrice, dbUser);
 
-  const handleBuyNowOrder = async (method) => {
-    if (!selectedAddress)
-      return alert("Please select or add a delivery address first");
-
-    try {
-      setProcessingOrder(true);
-      if (method === "ONLINE") {
-        const orderPayload = {
-          orderItems: [
-            {
-              product: product._id,
-              name: product.name,
-              image: product.images?.[0],
-              price: finalPrice,
-              mrp: mrp,
-              qty: 1,
-              offerDetails: offerDetails,
-            },
-          ],
-          shippingAddress: {
-            address: selectedAddress.fullAddress,
-            city: selectedAddress.district || "Tamil Nadu",
-            postalCode: selectedAddress.pinCode,
-            phone: selectedAddress.phone,
-            district: selectedAddress.district || "",
-          },
-          totalPrice: finalPrice + deliveryCharge,
-          paymentMethod: "ONLINE",
-          isPaid: false,
-          orderStatus: "Not Paid",
-        };
-        const { data: orderData } = await axios.post(
-          `${API}/api/orders`,
-          orderPayload,
-          config,
-        );
-        const mongoOrderId = orderData._id;
-
-        const { data: rzpData } = await axios.post(
-          `${API}/api/payment/create-order`,
-          { amount: finalPrice + deliveryCharge },
-          config,
-        );
-        const options = {
-          key: rzpData.key,
-          amount: rzpData.amount,
-          currency: "INR",
-          name: "FreshCart",
-          order_id: rzpData.id,
-          handler: async (res) => {
-            try {
-              await axios.post(
-                `${API}/api/orders/verify`,
-                {
-                  razorpay_order_id: res.razorpay_order_id,
-                  razorpay_payment_id: res.razorpay_payment_id,
-                  razorpay_signature: res.razorpay_signature,
-                  orderId: mongoOrderId,
-                },
-                config,
-              );
-              setOrderSuccess(true);
-              setShowPaymentModal(false);
-            } catch (err) {
-              console.error("Payment verify failed:", err);
-              alert(
-                "Payment received but verification failed. Your order is saved - please contact support with Order ID: " +
-                  mongoOrderId,
-              );
-              setOrderSuccess(true);
-              setShowPaymentModal(false);
-            }
-          },
-          theme: { color: "#6FAF8E" },
-        };
-        new window.Razorpay(options).open();
-      } else {
-        await saveOrderToDB("COD", false);
-      }
-    } catch {
-      alert("Order could not be processed.");
-    } finally {
-      setProcessingOrder(false);
-    }
-  };
-
-  const saveOrderToDB = async (method, isPaid) => {
-    const orderData = {
-      orderItems: [
-        {
-          product: product._id,
-          name: product.name,
-          image: product.images?.[0],
-          price: finalPrice,
-          mrp: mrp,
-          qty: 1,
-          offerDetails: offerDetails,
-        },
-      ],
-      shippingAddress: {
-        address: selectedAddress.fullAddress,
-        city: selectedAddress.district || "Tamil Nadu",
-        postalCode: selectedAddress.pinCode,
-        phone: selectedAddress.phone,
-        district: selectedAddress.district || "",
-      },
-      totalPrice: finalPrice + deliveryCharge,
-      paymentMethod: method,
-      isPaid,
-      orderStatus: isPaid ? "Paid" : "Not Paid",
-    };
-
-    try {
-      await axios.post(`${API}/api/orders`, orderData, config);
-      setOrderSuccess(true);
-      setShowPaymentModal(false);
-    } catch {
-      alert("Database error. Order not saved.");
-    }
-  };
-
   if (loading)
     return (
-      <div className="flex justify-center items-center h-screen font-bold text-[#6FAF8E]">
+      <div className="flex justify-center items-center h-screen font-bold text-green-600">
         Loading...
       </div>
     );
@@ -440,7 +280,7 @@ const ProductDetails = () => {
   return (
     <>
       {/* Product Image */}
-      <div className=" rounded-2xl border border-gray-200 bg-white shadow-sm">
+      <div className=" rounded-2xl border border-gray-300 bg-white shadow-sm">
         <div className="flex items-center justify-center h-[390px] p-8">
           <img
             src={
@@ -522,7 +362,7 @@ const ProductDetails = () => {
 
             <button
               onClick={() => setShowFullDesc(!showFullDesc)}
-              className="mt-2 text-sm font-semibold text-[#6FAF8E]"
+              className="mt-2 text-sm font-semibold text-green-600"
             >
               {showFullDesc ? "Show Less" : "Read More"}
             </button>
@@ -538,7 +378,7 @@ const ProductDetails = () => {
 
           <button
             onClick={() => navigate("/")}
-            className="text-sm font-medium text-[#6FAF8E]"
+            className="text-sm font-medium text-green-600"
           >
             View All
           </button>
@@ -602,7 +442,7 @@ const ProductDetails = () => {
                   className={`cursor-pointer rounded-xl border p-4 transition ${
                     selectedAddress?._id === addr._id
                       ? "border-[#6FAF8E] bg-green-50"
-                      : "border-gray-200 hover:border-[#6FAF8E]"
+                      : "border-gray-300 hover:border-[#6FAF8E]"
                   }`}
                 >
                   <div className="flex justify-between">
@@ -629,7 +469,7 @@ const ProductDetails = () => {
                           district: addr.district || "",
                         });
                       }}
-                      className="text-xs font-semibold text-[#6FAF8E]"
+                      className="text-xs font-semibold text-green-600"
                     >
                       Edit
                     </button>
@@ -949,7 +789,7 @@ const ProductDetails = () => {
             {/* Success Icon */}
 
             <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-green-100">
-              <CheckCircle size={42} className="text-[#6FAF8E]" />
+              <CheckCircle size={42} className="text-green-600" />
             </div>
 
             {/* Title */}
@@ -962,7 +802,7 @@ const ProductDetails = () => {
 
             <p className="mt-3 text-sm text-gray-500 leading-6">
               Thank you for shopping with
-              <span className="font-semibold text-[#6FAF8E]"> FreshCart</span>
+              <span className="font-semibold text-green-600"> FreshCart</span>
               <br />
               Your order has been placed successfully.
             </p>

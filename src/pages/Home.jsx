@@ -10,6 +10,7 @@ import {
   Crown,
   Award,
 } from "lucide-react";
+import SEO from "../components/SEO";
 import fruitsImg from "../assets/cat/Fruits.png";
 import vegeImg from "../assets/cat/Vege.png";
 import dairyImg from "../assets/cat/dairy.png";
@@ -180,47 +181,6 @@ const Home = ({ search = "" }) => {
     }
   };
 
-  const updateOfferLink = async (id, newLink) => {
-    try {
-      await fetch(`${API}/api/offers/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ link: newLink }),
-      });
-      bustCache();
-      fetchData(true);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const updateOfferImage = async (id, file) => {
-    const fd = new FormData();
-    fd.append("image", file);
-    try {
-      await fetch(`${API}/api/offers/${id}`, {
-        method: "PUT",
-        credentials: "include",
-        body: fd,
-      });
-      bustCache();
-      fetchData(true);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const deleteOffer = async (id) => {
-    if (!window.confirm("Delete this offer?")) return;
-    await fetch(`${API}/api/offers/${id}`, {
-      method: "DELETE",
-      credentials: "include",
-    });
-    bustCache();
-    setOffers(offers.filter((o) => o._id !== id));
-  };
-
   const pinnedProducts = products
     .filter((p) => p.isPinned)
     .filter(
@@ -240,6 +200,11 @@ const Home = ({ search = "" }) => {
 
   return (
     <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 pb-0 text-[#2E2A22]">
+      <SEO
+        title="FreshCart - Buy Fresh Fruits, Vegetables & Groceries Online"
+        description="Shop fresh fruits, vegetables, dairy products and daily groceries online at FreshCart. Discover exclusive offers and smart discounts."
+        url="/"
+      />
       <section className="relative mt-2 sm:mt-4 overflow-hidden rounded-2xl border  shadow-[0_18px_45px_rgba(46,125,50,0.12)]">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(129,199,132,0.3),transparent_28%),linear-gradient(135deg,#EFF3F1,rgba(255,255,255,0.75))]" />
         <div className="relative grid min-h-[360px] md:min-h-[420px] lg:grid-cols-[0.92fr_1.08fr]">
@@ -327,7 +292,7 @@ const Home = ({ search = "" }) => {
         className="my-6 rounded-2xl border  bg-[#EFF3F1] border-blue-200 p-4 sm:my-10 sm:p-6 md:my-12"
         id="category-section"
       >
-        <SectionTitle eyebrow="Shop fresh" title="Category"/>
+        <SectionTitle eyebrow="Shop fresh" title="Category" />
         <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 gap-4">
           {categories.map((cat) => (
             <div
@@ -437,67 +402,6 @@ const Home = ({ search = "" }) => {
           )}
         </div>
       </section>
-
-      <footer className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] bg-[#EFF3F1] text-[#2E7D32] pt-8 sm:pt-12 md:pt-16 pb-5 sm:pb-8 mt-10 sm:mt-14 md:mt-20 overflow-hidden border border-blue-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 grid grid-cols-1 sm:grid-cols-3  sm:gap-8 md:gap-10">
-          <div className="space-y-2 sm:space-y-3 sm:text-left">
-            <h2 className="text-lg sm:text-xl md:text-2xl font-black  tracking-tight">
-              FreshCart
-            </h2>
-            <p className="text-[11px] sm:text-xs md:text-sm  leading-relaxed max-w-[220px]  sm:mx-0">
-              Your destination for farm-fresh produce. Quality you can taste.
-            </p>
-          </div>
-
-          <div className=" sm:text-left">
-            <h3 className=" font-bold mb-2 mt-2 sm:mb-4 uppercase text-[10px] sm:text-xs tracking-widest">
-              Explore
-            </h3>
-            <ul className="text-[11px] sm:text-xs md:text-sm space-y-2">
-              <li>
-                <button
-                  onClick={() =>
-                    window.scrollTo({ top: 0, behavior: "smooth" })
-                  }
-                  className=""
-                >
-                  Home
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() =>
-                    document
-                      .getElementById("category-section")
-                      ?.scrollIntoView({ behavior: "smooth" })
-                  }
-                  className=""
-                >
-                  Shop Categories
-                </button>
-              </li>
-            </ul>
-          </div>
-
-          <div className=" sm:text-left">
-            <h3 className=" font-bold mb-2 mt-2 sm:mb-4 uppercase text-[10px] sm:text-xs tracking-widest">
-              Support
-            </h3>
-            <div className="text-[11px] sm:text-xs md:text-sm space-y-1.5 sm:space-y-2 ">
-              <p>
-                <span className="">Email:</span> freshcart1234@gmail.com
-              </p>
-              <p>
-                <span className="">Call:</span> +91 78100 70xxx
-              </p>
-            </div>
-          <p className="text-[10px] pt-2">
-            @Copyright 2026 FreshCart. All Rights
-            Reserved.
-          </p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };
